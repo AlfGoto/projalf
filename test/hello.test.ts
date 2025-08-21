@@ -1,5 +1,5 @@
-import { Hello } from '../src';
+import { Projalf } from '../src';
 
-test('hello', () => {
-  expect(new Hello().sayHello()).toBe('hello, world!');
+test('exports Projalf', () => {
+  expect(typeof Projalf).toBe('function');
 });
