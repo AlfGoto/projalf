@@ -1,5 +1,6 @@
 {
   "name": "projalf",
+  "description": "A projen project made to help use the aws-cdk",
   "repository": {
     "type": "git",
     "url": "git@github.com:AlfGoto/projalf.git"
@@ -64,7 +65,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.0",
+  "version": "0.0.16",
   "jest": {
     "coverageProvider": "v8",
     "testMatch": [

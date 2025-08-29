@@ -1,1 +1,1 @@
-export * from './Projalf';
+export * from "./Projalf"

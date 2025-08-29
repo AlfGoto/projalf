@@ -1,1 +1,1 @@
-# replace this
+This is a projen project made to help use the aws-cdk

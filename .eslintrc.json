@@ -50,7 +50,7 @@
     ],
     "@stylistic/quotes": [
       "error",
-      "single",
+      "double",
       {
         "avoidEscape": true
       }
@@ -111,11 +111,11 @@
       "error"
     ],
     "@stylistic/member-delimiter-style": [
-      "error"
+      "off"
     ],
     "@stylistic/semi": [
       "error",
-      "always"
+      "never"
     ],
     "@stylistic/max-len": [
       "error",
@@ -129,8 +129,7 @@
       }
     ],
     "@stylistic/quote-props": [
-      "error",
-      "consistent-as-needed"
+      "off"
     ],
     "@stylistic/key-spacing": [
       "error"
@@ -209,6 +208,9 @@
           "method"
         ]
       }
+    ],
+    "@stylistic/consistent-quotes": [
+      "off"
     ]
   },
   "overrides": [
