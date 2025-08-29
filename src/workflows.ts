@@ -34,7 +34,6 @@ export function workflow(project: Projalf) {
           "aws-region": "${{ secrets.AWS_REGION || 'eu-central-1' }}",
         },
       },
-      { name: "CDK Bootstrap", run: "npx cdk bootstrap" },
     ],
   }
 
