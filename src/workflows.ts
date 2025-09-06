@@ -2,10 +2,10 @@ import { JobPermission } from "projen/lib/github/workflows-model"
 import { Projalf } from "./Projalf"
 
 export function workflow(project: Projalf) {
-  const deployWorkflow = project.github!.addWorkflow("deploy")
+  const cicdWorkflow = project.github!.addWorkflow("ci-cd")
 
-  // Trigger on PR and push to main
-  deployWorkflow.on({
+  // Single workflow - triggers on PR and push to main
+  cicdWorkflow.on({
     pullRequest: {},
     push: { branches: ["main"] },
   })
@@ -37,10 +37,46 @@ export function workflow(project: Projalf) {
     ],
   }
 
-  // Job: deploy dev on PR
-  deployWorkflow.addJobs({
+  // All jobs in one workflow with proper dependencies
+  cicdWorkflow.addJobs({
+    test: {
+      ...jobDefaults,
+      steps: [
+        ...jobDefaults.steps,
+        {
+          name: "Generate random stage ID",
+          id: "stage",
+          run: 'echo "STAGE_ID=test-$(shuf -i 10000-99999 -n 1)" >> $GITHUB_OUTPUT',
+        },
+        {
+          name: "Deploy Test Stack",
+          run: "npm run deploy -- -c stage=${{ steps.stage.outputs.STAGE_ID }} --require-approval never",
+          env: {
+            CDK_DEPLOY_ACCOUNT: "${{ secrets.AWS_TEST_ACCOUNT }}",
+            CDK_DEPLOY_REGION: "${{ secrets.AWS_REGION || 'eu-central-1' }}",
+          },
+        },
+        {
+          name: "Run E2E Tests",
+          run: "npm run test:e2e",
+          env: {
+            STAGE: "${{ steps.stage.outputs.STAGE_ID }}",
+          },
+        },
+        {
+          name: "Destroy Test Stack",
+          if: "always()",
+          run: "npm run destroy -- -c stage=${{ steps.stage.outputs.STAGE_ID }} --force",
+          env: {
+            CDK_DEPLOY_ACCOUNT: "${{ secrets.AWS_TEST_ACCOUNT }}",
+            CDK_DEPLOY_REGION: "${{ secrets.AWS_REGION || 'eu-central-1' }}",
+          },
+        },
+      ],
+    },
     deploy_dev: {
       ...jobDefaults,
+      needs: ["test"],
       if: "github.event_name == 'pull_request'",
       steps: [
         ...jobDefaults.steps,
@@ -56,6 +92,7 @@ export function workflow(project: Projalf) {
     },
     deploy_prod: {
       ...jobDefaults,
+      needs: ["test"],
       if: "github.ref == 'refs/heads/main' && github.event_name == 'push'",
       steps: [
         ...jobDefaults.steps,
