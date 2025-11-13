@@ -96,6 +96,7 @@
     },
     {
       "name": "projen",
+      "version": "*",
       "type": "peer"
     }
   ],

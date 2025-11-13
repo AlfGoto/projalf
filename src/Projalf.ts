@@ -35,7 +35,7 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
       packageManager:
         options.packageManager ?? javascript.NodePackageManager.NPM,
       projenrcTs: options.projenrcTs ?? true,
-      cdkVersion: options.cdkVersion ?? "2.156.0",
+      cdkVersion: options.cdkVersion ?? "^2.156.0",
       context: mergedContext,
       deps: options.deps ?? [],
       devDeps: options.devDeps ?? [],

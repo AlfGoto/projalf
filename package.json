@@ -37,7 +37,7 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.3.0",
+    "@types/node": "^12",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
     "commit-and-tag-version": "^12",
@@ -50,22 +50,22 @@
     "jsii": "~5.8.0",
     "jsii-diff": "^1.113.0",
     "jsii-docgen": "^10.5.0",
-    "jsii-pacmak": "^1.113.0",
+    "jsii-pacmak": "^1.114.1",
     "jsii-rosetta": "~5.8.0",
-    "projen": "^0.95.2",
+    "projen": "^0.96.1",
     "ts-jest": "^29.4.1",
-    "ts-node": "^10.9.2",
+    "ts-node": "^9",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
-    "projen": "^0.95.2"
+    "projen": "^0.96.1"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.23",
+  "version": "0.0.28",
   "jest": {
     "coverageProvider": "v8",
     "testMatch": [
