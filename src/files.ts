@@ -6,7 +6,7 @@ export class Files extends Component {
     private appProject: Projalf,
     className: string,
     fileBase: string,
-    inferredName: string,
+    inferredName: string
   ) {
     super(appProject)
     this.appProject = appProject
@@ -26,7 +26,7 @@ export class ${className} extends cdk.Stack {
     // Add your infra here...
   }
 }
-`,
+`
     })
 
     this.appProject.tryRemoveFile("src/main.ts")
@@ -42,7 +42,7 @@ export class ${className} extends cdk.Stack {
       const serviceName = '${inferredName}';
       new ${className}(app, serviceName, { env, serviceName });
       app.synth();
-      `,
+      `
     })
   }
 }
