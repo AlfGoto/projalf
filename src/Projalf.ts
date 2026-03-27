@@ -18,8 +18,7 @@ export interface ProjalfOptions extends awscdk.AwsCdkTypeScriptAppOptions {}
 
 export class Projalf extends awscdk.AwsCdkTypeScriptApp {
   constructor(options: ProjalfOptions) {
-    const inferredName =
-      options.name ?? inferNameFromGit() ?? inferNameFromCwd()
+    const inferredName = options.name ?? inferNameFromGit() ?? inferNameFromCwd()
     const className = toPascalCase(inferredName)
     const fileBase = inferredName.toLowerCase()
 
@@ -32,8 +31,7 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
       ...options,
       name: inferredName,
       defaultReleaseBranch: options.defaultReleaseBranch ?? "main",
-      packageManager:
-        options.packageManager ?? javascript.NodePackageManager.NPM,
+      packageManager: options.packageManager ?? javascript.NodePackageManager.NPM,
       projenrcTs: options.projenrcTs ?? true,
       cdkVersion: options.cdkVersion ?? "^2.156.0",
       context: mergedContext,
@@ -47,12 +45,14 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
       },
       watchIncludes: ["src/**/*.ts", "src/**/*.tsx"],
 
+      prettier: options.prettier ?? true,
       prettierOptions: {
         ...options.prettierOptions,
         settings: {
           semi: false,
           printWidth: 100,
           singleQuote: false,
+          trailingComma: javascript.TrailingComma.NONE,
           ...options.prettierOptions?.settings
         }
       },
@@ -72,12 +72,11 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
 
     new Files(this, className, fileBase, inferredName)
 
-    // Enforce ESLint style: double quotes and no semicolons
+    this.addDevDeps("@stylistic/eslint-plugin@^2")
+    this.eslint?.addPlugins("@stylistic")
     this.eslint?.addRules({
       "@stylistic/quotes": ["error", "double", { avoidEscape: true }],
       "@stylistic/semi": ["error", "never"],
-      "@stylistic/consistent-quotes": ["off"],
-      "@stylistic/member-delimiter-style": ["off"],
       "@stylistic/comma-dangle": ["error", "never"],
       "@stylistic/max-len": [
         "error",

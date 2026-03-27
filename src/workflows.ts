@@ -36,8 +36,7 @@ export function workflow(project: Projalf) {
           uses: "aws-actions/configure-aws-credentials@v4",
           with: {
             "aws-access-key-id": "${{ secrets.TEST_AWS_ACCESS_KEY_ID }}",
-            "aws-secret-access-key":
-              "${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}",
+            "aws-secret-access-key": "${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}",
             "aws-region": "${{ secrets.AWS_REGION || 'eu-central-1' }}"
           }
         },
