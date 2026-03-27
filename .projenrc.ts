@@ -14,9 +14,9 @@ const project = new cdk.JsiiProject({
   // packageName: undefined,  /* The "name" in package.json. */
   peerDeps: ["projen@*"],
   peerDependencyOptions: {
-    pinnedDevDependency: false,
+    pinnedDevDependency: false
   },
-  description: "A projen project made to help use the aws-cdk",
+  description: "A projen project made to help use the aws-cdk"
 })
 
 project.eslint?.addRules({
@@ -25,6 +25,18 @@ project.eslint?.addRules({
   "@stylistic/consistent-quotes": ["off"],
   "@stylistic/quote-props": ["off"],
   "@stylistic/member-delimiter-style": ["off"],
+  "@stylistic/comma-dangle": ["error", "never"],
+  "@stylistic/max-len": [
+    "error",
+    {
+      code: 100,
+      ignoreUrls: true,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+      ignoreComments: true,
+      ignoreRegExpLiterals: true
+    }
+  ]
 })
 
 project.synth()
