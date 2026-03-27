@@ -57,7 +57,7 @@
     ],
     "@stylistic/comma-dangle": [
       "error",
-      "always-multiline"
+      "never"
     ],
     "@stylistic/comma-spacing": [
       "error",
@@ -120,7 +120,7 @@
     "@stylistic/max-len": [
       "error",
       {
-        "code": 150,
+        "code": 100,
         "ignoreUrls": true,
         "ignoreStrings": true,
         "ignoreTemplateLiterals": true,

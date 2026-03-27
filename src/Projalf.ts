@@ -1,8 +1,8 @@
-import * as cp from "child_process"
-import * as path from "path"
-import { awscdk, javascript, SampleFile } from "projen"
-import { Files } from "./files"
-import { workflow } from "./workflows"
+import * as cp from "child_process";
+import * as path from "path";
+import { awscdk, javascript, SampleFile } from "projen";
+import { Files } from "./files";
+import { workflow } from "./workflows";
 
 const defaultJestConfig: javascript.JestConfigOptions = {
   preset: "ts-jest",
@@ -12,20 +12,20 @@ const defaultJestConfig: javascript.JestConfigOptions = {
     }),
   },
   setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
-}
+};
 
 export interface ProjalfOptions extends awscdk.AwsCdkTypeScriptAppOptions {}
 
 export class Projalf extends awscdk.AwsCdkTypeScriptApp {
   constructor(options: ProjalfOptions) {
     const inferredName =
-      options.name ?? inferNameFromGit() ?? inferNameFromCwd()
-    const className = toPascalCase(inferredName)
-    const fileBase = inferredName.toLowerCase()
+      options.name ?? inferNameFromGit() ?? inferNameFromCwd();
+    const className = toPascalCase(inferredName);
+    const fileBase = inferredName.toLowerCase();
 
-    const mergedContext = { ...(options.context ?? {}) } as Record<string, any>
+    const mergedContext = { ...(options.context ?? {}) } as Record<string, any>;
     if (mergedContext.serviceName === undefined) {
-      mergedContext.serviceName = inferredName
+      mergedContext.serviceName = inferredName;
     }
 
     super({
@@ -68,9 +68,9 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
           },
         },
       },
-    })
+    });
 
-    new Files(this, className, fileBase, inferredName)
+    new Files(this, className, fileBase, inferredName);
 
     // Enforce ESLint style: double quotes and no semicolons
     this.eslint?.addRules({
@@ -78,18 +78,29 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
       "@stylistic/semi": ["error", "never"],
       "@stylistic/consistent-quotes": ["off"],
       "@stylistic/member-delimiter-style": ["off"],
-      "@stylistic/comma-dangle": ["error", "always-multiline"],
-    })
+      "@stylistic/comma-dangle": ["error", "never"],
+      "@stylistic/max-len": [
+        "error",
+        {
+          code: 100,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreComments: true,
+          ignoreRegExpLiterals: true,
+        },
+      ],
+    });
 
-    workflow(this)
+    workflow(this);
 
     this.addTask("deploy:watch", {
       exec: "cdk deploy --all --method=direct --outputs-file=test.output.json --watch --hotswap-fallback --require-approval=never",
       receiveArgs: true,
-    })
+    });
     this.addTask("test:e2e", {
       exec: "jest --config jest.e2e.config.json --runInBand --passWithNoTests",
-    })
+    });
 
     new javascript.Jest(this, {
       configFilePath: "jest.integ.config.json",
@@ -101,7 +112,7 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
         ],
         ...defaultJestConfig,
       },
-    })
+    });
 
     new javascript.Jest(this, {
       configFilePath: "jest.e2e.config.json",
@@ -113,12 +124,12 @@ export class Projalf extends awscdk.AwsCdkTypeScriptApp {
         ],
         ...defaultJestConfig,
       },
-    })
+    });
 
     new SampleFile(this, "test/setup.ts", {
       contents: `jest.setTimeout(10000)
 `,
-    })
+    });
   }
 }
 
@@ -129,17 +140,17 @@ function inferNameFromGit(): string | undefined {
         stdio: ["ignore", "pipe", "ignore"],
       })
       .toString()
-      .trim()
-    if (!remote) return undefined
-    const match = remote.match(/\/([^\/]+?)(?:\.git)?$/)
-    return match?.[1]
+      .trim();
+    if (!remote) return undefined;
+    const match = remote.match(/\/([^\/]+?)(?:\.git)?$/);
+    return match?.[1];
   } catch {
-    return undefined
+    return undefined;
   }
 }
 
 function inferNameFromCwd(): string {
-  return path.basename(process.cwd())
+  return path.basename(process.cwd());
 }
 
 function toPascalCase(input: string): string {
@@ -148,5 +159,5 @@ function toPascalCase(input: string): string {
     .split(" ")
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-    .join("")
+    .join("");
 }
